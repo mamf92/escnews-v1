@@ -16,7 +16,6 @@ function addSubmitHandler(url) {
     const form = document.forms.createPostForm;
     form.addEventListener("submit", (event) => {
         event.preventDefault();
-        console.log('Submitt pressed');
         createPost(form, url)
     });
 }
@@ -24,7 +23,6 @@ function addSubmitHandler(url) {
 function createPost(form, url) {
     const formData = getFormData(form);
     const validFormData = validateFormData(formData);
-    console.log(validFormData);
     if (!validFormData) {
         return;
     }
@@ -39,7 +37,10 @@ function getFormData(form) {
 }
 
 function validateFormData(data) {
-    if (!data) { console.log("No data provided"); return false; }
+    if (!data) {
+        alert("No data provided");
+        return false;
+    }
 
     if (!data.title || !data.body || !data.url || !data.alt) {
         alert("All fields are required.");
@@ -96,6 +97,7 @@ async function postPostWithToken(data, url) {
         showErrorPopup('Check if image is publicly available, and try again.', 'Error creating post');
     }
 }
+
 document.addEventListener('DOMContentLoaded', function () {
     displayName();
     addLogInEventListener();

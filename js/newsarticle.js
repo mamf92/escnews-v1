@@ -16,7 +16,7 @@ async function getPostByID(url) {
         const post = json.data;
         displayPost(post);
     } catch (error) {
-        console.log(error);
+        console.error('Error fetching post:', error);
     }
 }
 
@@ -91,14 +91,6 @@ function displayPost(post) {
     const articleCard = createPost(post);
     articleSection.appendChild(articleCard);
 }
-
-
-// function sharePostWithID(id) {
-//     let basePath = window.location.hostname === "mamf92.github.io"
-//         ? "/escnews"
-//         : "";
-//     window.location.href = `${basePath}/html/public/newsarticle.html?id=${id}`;
-// }
 
 
 document.addEventListener('DOMContentLoaded', function () {

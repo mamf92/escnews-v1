@@ -230,7 +230,7 @@ async function deletePostWithAuthorization(id) {
     try {
         const confirmed = await showConfirmationPopup('Are you sure you want to delete this post?', 'Delete Post');
         if (!confirmed) {
-            return; // User canceled the deletion
+            return;
         }
         const token = localStorage.getItem('accessToken');
         const deleteData = {
@@ -245,7 +245,8 @@ async function deletePostWithAuthorization(id) {
         if (!response.ok) { throw new Error('Error creating user. Error: ' + response.status); }
         getAllPosts(allPostsURL);
     } catch (error) {
-        console.log(error);
+        console.error('Error deleting post:', error);
+        showErrorPopup('An error occurred while deleting the post. Please try again.', 'Delete Post Error');
     }
 }
 
