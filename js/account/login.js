@@ -1,16 +1,18 @@
+import { showErrorPopup } from '../shared.js';
+
+
 const API_URL = "https://v2.api.noroff.dev/auth/login";
 
 async function loginUser(form, url) {
     const formData = getFormData(form);
     const validFormData = validateFormData(formData);
     if (!validFormData) {
-        alert("Invalid email or password.");
         return;
     } else {
         const json = await postLoginToAPI(formData, url);
         storeAccessToken(json);
         storeName(json);
-        moveToNextPage();
+        moveToNextPage('html/post/');
     }
 }
 
@@ -30,23 +32,23 @@ function getFormData(form) {
 
 function validateFormData(data) {
     if (!data) {
-        alert("No data provided.");
+        showErrorPopup('Please check all fields, and try again.', 'No data provided.');
         return false;
     }
 
     if (!data.email || !data.password) {
-        alert("All fields are required.");
+        showErrorPopup('Please check all fields, and try again. ', "All fields are required.");
         return false;
     }
     const emailRegex = /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/;
     const passwordRegex = /^[a-zA-Z0-9._%+-]{8,}$/;
 
     if (!emailRegex.test(data.email)) {
-        alert("Email must be a valid email address ending with @stud.noroff.no");
+        showErrorPopup('Email must be a valid email address ending with @stud.noroff.no', 'Invalid email format.');
         return false;
     }
     if (!passwordRegex.test(data.password)) {
-        alert("Password must be at least 8 characters long and can only contain letters, numbers, and special characters.");
+        showErrorPopup('Password must be at least 8 characters long and can only contain letters, numbers, and special characters.', 'Invalid password.');
         return false;
     }
     return true;
@@ -63,11 +65,12 @@ async function postLoginToAPI(data, url) {
         };
 
         const response = await fetch(url, postData);
-        if (!response.ok) { throw new Error('Error signing in ' + response.status); }
+        if (!response.ok) { throw new Error('Error signing in '); }
         const json = await response.json();
         return json;
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        showErrorPopup('Please check your email and password, and try again.', 'Login failed.');
     }
 }
 function storeAccessToken(data) {
@@ -78,7 +81,6 @@ function storeAccessToken(data) {
 function storeName(data) {
     const name = data.data.name.replace(/_.*/, '');
     localStorage.setItem('name', name);
-    console.log(name);
 }
 
 function moveToNextPage() {
