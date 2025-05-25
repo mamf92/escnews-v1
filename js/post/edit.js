@@ -48,16 +48,13 @@ function addSubmitHandler(url) {
     const form = document.forms.editPostForm;
     form.addEventListener("submit", (event) => {
         event.preventDefault();
-        console.log('Submitt pressed');
         createUpdatedPost(form, url)
     });
 }
 
 function createUpdatedPost(form, url) {
     const formData = getFormData(form);
-    console.log('Form data collected.', formData);
     const validFormData = validateFormData(formData);
-    console.log(validFormData);
     if (!validFormData) {
         showErrorPopup('Please recheck all fields and try again.', 'Invalid form data.');
         return;
@@ -120,7 +117,6 @@ async function putPostWithToken(data, url) {
         if (!response.ok) { throw new Error('Could not create post.') };
         const json = await response.json();
         const id = json.data.id;
-        console.log(json.data.id);
         moveToNextPage();
     } catch (error) {
         console.error('Error updating post:', error);
