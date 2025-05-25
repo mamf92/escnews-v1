@@ -206,11 +206,10 @@ function loadMorePosts(posts) {
 function routeToCreatePost() {
     const createNewPostButton = document.querySelector('#createNewPostButton');
     createNewPostButton.addEventListener('click', function () {
-        const currentPageHost = window.location.hostname;
-        const currentPort = window.location.port;
-        const newPagePath = 'html/post/create.html';
-        newPageURL = `http://${currentPageHost}:${currentPort}/${newPagePath}`;
-        window.location.href = newPageURL;
+        let basePath = window.location.hostname === "mamf92.github.io"
+            ? "/escnews"
+            : "";
+        window.location.href = `${basePath}/html/post/create.html`;
     })
 }
 function routeToEditWithID(id) {
