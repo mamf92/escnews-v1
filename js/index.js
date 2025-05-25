@@ -123,6 +123,9 @@ function createContentCardXSmall(post) {
 function displayPublishedPosts(posts) {
     const publishedPostsSection = document.querySelector(".published-posts");
     publishedPostsSection.innerHTML = "";
+    const publishedPostsHeading = document.createElement('h2');
+    publishedPostsHeading.classList.add('sr-only');
+    publishedPostsHeading.textContent = "More recent posts about ESC";
     const newestPosts = posts.slice(3, 7);
     newestPosts.forEach(post => {
         const contentCardXSmall = createContentCardXSmall(post);
@@ -170,6 +173,9 @@ function createContentCardThumbnail(post) {
 function displayMorePublishedPosts(posts) {
     const morePublishedPostsContent = document.querySelector('.more-published-posts__content');
     morePublishedPostsContent.innerHTML = "";
+    const publishedPostsHeading = document.createElement('h2');
+    publishedPostsHeading.classList.add('sr-only');
+    publishedPostsHeading.textContent = "Older posts about ESC";
     const morePosts = posts.slice(7, 15);
     morePosts.forEach(post => {
         const contentCardThumbnail = createContentCardThumbnail(post);
