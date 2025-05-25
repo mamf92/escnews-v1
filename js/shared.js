@@ -45,7 +45,7 @@ function showErrorPopup(message, title) {
     const errorPopupText = document.createElement('div');
     errorPopupText.classList.add('error-popup__text');
 
-    const errorPopupTitle = document.createElement('h3');
+    const errorPopupTitle = document.createElement('h2');
     errorPopupTitle.classList.add('error-popup__heading');
     errorPopupTitle.textContent = title;
 

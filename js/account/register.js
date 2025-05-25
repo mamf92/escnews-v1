@@ -1,28 +1,19 @@
-import { addLogInEventListener, displayName } from '../shared.js';
+import { addLogInEventListener, displayName, showErrorPopup } from '../shared.js';
 
 
 const API_URL = "https://v2.api.noroff.dev/auth/register";
 
 async function registerUser(form, url) {
-    console.log("This is the url submitted addSubmitHandler to the registerUser:", url);
     const formData = getFormData(form);
-    console.log("Form data collected:", formData);
     const validFormData = validateFormData(formData);
     if (!validFormData) {
-        console.log("Form data is not valid");
         return;
     } else {
-        console.log("Form data is valid");
-    }
-    const preparedData = prepareUserData(formData);
-    console.log("This is the prepared data:", preparedData);
-    console.log(JSON.stringify(preparedData));
-    const response = postRegistrationToAPI(preparedData, url);
-    if (!response) {
-        console.log("User not registered.")
-        return;
-    } else {
-        moveToNextPage("html/acount/login.html");
+        const preparedData = prepareUserData(formData);
+        const response = await postRegistrationToAPI(preparedData, url);
+        if (response) {
+            moveToNextPage("html/acount/login.html");
+        }
     }
 }
 
@@ -41,26 +32,30 @@ function getFormData(form) {
 }
 
 function validateFormData(data) {
-    if (!data) { console.log("No data provided"); return false; }
+    if (!data) {
+        showErrorPopup('Please check all fields, and try again.', 'No data provided.');
+        return false;
+    }
 
     if (!data.name || !data.email || !data.password) {
-        alert("All fields are required.");
+        showErrorPopup('Please check all fields, and try again. ', "All fields are required.");
         return false;
     }
     const nameRegex = /^[a-zA-ZÀ-ÿ\s\-]{3,}$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@stud\.noroff\.no$/;
-    const passwordRegex = /^[a-zA-ZÀ-ÿ0-9\/#?!@$%^&*-]{8,}$/;
+    const passwordRegex = /^[a-zA-ZÀ-ÿ0-9#?!@$%^&*\-]{8,}$/;
 
     if (!nameRegex.test(data.name)) {
-        alert("Name must be at least 3 characters long and can only contain letters, spaces, and hyphens.");
+        showErrorPopup('Name must be at least 3 characters long and can only contain letters, spaces, and hyphens.', 'Invalid name format.');
         return false;
     }
+
     if (!emailRegex.test(data.email)) {
-        alert("Email must be a valid email address ending with @stud.noroff.no");
+        showErrorPopup('Email must be a valid email address ending with @stud.noroff.no', 'Invalid email format.');
         return false;
     }
     if (!passwordRegex.test(data.password)) {
-        alert("Password must be at least 8 characters long and can only contain letters, numbers, and special characters.");
+        showErrorPopup('Password must be at least 8 characters long and can only contain letters, numbers, and special characters.', 'Invalid password.');
         return false;
     }
     return true;
@@ -81,7 +76,6 @@ function checkPasswordConfirmation() {
     } else {
         passwordConfirm.setCustomValidity("");
     }
-
 }
 
 function prepareUserData(data) {
@@ -94,8 +88,6 @@ function prepareUserData(data) {
 }
 
 async function postRegistrationToAPI(data, url) {
-    console.log("This is the url submitted from registerUser to postRegistrationToAPI:", url);
-
     try {
         const postData = {
             method: 'POST',
@@ -106,25 +98,21 @@ async function postRegistrationToAPI(data, url) {
         };
 
         const response = await fetch(url, postData);
-        console.log(response);
         if (!response.ok) { throw new Error('Error creating user. Error: ' + response.status); }
         const json = await response.json();
-        console.log(json);
         return json;
     } catch (error) {
-        console.log(error);
+        console.error('Error:', error);
+        showErrorPopup('Please check your input and try again.', 'Registration failed.');
     }
 }
 
-function moveToNextPage(urlPath) {
-    const currentPageHost = window.location.hostname;
-    console.log(currentPageHost);
-    const currentPort = window.location.port;
-    console.log(currentPort);
-    const newPagePath = urlPath;
-    newPageURL = `http://${currentPageHost}:${currentPort}/${newPagePath}`;
-    console.log(newPageURL)
-    window.location.href = newPageURL;
+
+function moveToNextPage() {
+    let basePath = window.location.hostname === "mamf92.github.io"
+        ? "/escnews"
+        : "";
+    window.location.href = `${basePath}/html/account/login.html`;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
