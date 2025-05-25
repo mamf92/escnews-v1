@@ -10,7 +10,7 @@ async function loginUser(form, url) {
         const json = await postLoginToAPI(formData, url);
         storeAccessToken(json);
         storeName(json);
-        moveToNextPage('html/post/');
+        moveToNextPage();
     }
 }
 
@@ -81,12 +81,11 @@ function storeName(data) {
     console.log(name);
 }
 
-function moveToNextPage(urlPath) {
-    const currentPageHost = window.location.hostname;
-    const currentPort = window.location.port;
-    const newPagePath = urlPath;
-    newPageURL = `http://${currentPageHost}:${currentPort}/${newPagePath}`;
-    window.location.href = newPageURL;
+function moveToNextPage() {
+    let basePath = window.location.hostname === "mamf92.github.io"
+        ? "/escnews"
+        : "";
+    window.location.href = `${basePath}/html/post/`;
 }
 
 
