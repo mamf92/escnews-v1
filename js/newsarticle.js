@@ -1,0 +1,109 @@
+import { addLogInEventListener, displayName } from './shared.js';
+
+const API_BASE_URL = "https://v2.api.noroff.dev";
+const allPostsURL = `${API_BASE_URL}/blog/posts/martin_fischer_test`;
+
+async function getPostByID(url) {
+    const queryString = window.location.search;
+    const urlParam = new URLSearchParams(queryString);
+    const id = urlParam.get("id");
+    try {
+        const response = await fetch(`${url}/${id}`);
+        if (!response.ok) {
+            throw new Error('Could not load article: ', response.statusText);
+        }
+        const json = await response.json();
+        const post = json.data;
+        displayPost(post);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function createPost(post) {
+    const articleCard = document.createElement('article');
+    articleCard.classList.add('card-article');
+
+    const articleCardImageContainer = document.createElement('div');
+    articleCardImageContainer.classList.add('card-article__image');
+
+    const articleCardImage = document.createElement('img');
+    articleCardImage.src = post.media.url;
+    articleCardImage.alt = post.media.alt;
+
+
+    const articleCardContent = document.createElement('div');
+    articleCardContent.classList.add('card-article__content');
+
+    const articleCardText = document.createElement('div');
+    articleCardText.classList.add('card-article__text');
+
+    const articleCardHeading = document.createElement('h3');
+    articleCardHeading.classList.add('card-article__heading');
+    articleCardHeading.textContent = post.title;
+
+
+    const articleCardAuthorDate = document.createElement('div');
+    articleCardAuthorDate.classList.add('card-article__authordate');
+
+    const articleCardAuthor = document.createElement('p');
+    articleCardAuthor.classList.add('card-article__author');
+    articleCardAuthor.textContent = post.author.name.replace(/_+/g, " ")
+
+    const articleCardDate = document.createElement('p');
+    articleCardDate.classList.add('card-article__date');
+    const date = Date.parse(post.updated);
+    const newDate = new Date(date);
+    const formatedDate = newDate.toLocaleDateString();
+    articleCardDate.textContent = formatedDate;
+
+    const articleCardBody = document.createElement('p');
+    articleCardBody.classList.add('card-article__body');
+    articleCardBody.textContent = post.body;
+
+    const shareButton = document.createElement('button');
+    shareButton.classList.add('button', 'primary', 'large', 'arrow-right');
+    shareButton.textContent = 'Share post';
+    shareButton.addEventListener('click', function () {
+        const copyURL = window.location.href;
+        navigator.clipboard.writeText(copyURL);
+        alert('Copied the link!');
+    })
+
+
+    articleCard.appendChild(articleCardImageContainer);
+    articleCardImageContainer.appendChild(articleCardImage);
+    articleCard.appendChild(articleCardContent);
+    articleCardContent.appendChild(articleCardText);
+    articleCardText.appendChild(articleCardHeading);
+    articleCardText.appendChild(articleCardAuthorDate);
+    articleCardAuthorDate.appendChild(articleCardAuthor);
+    articleCardAuthorDate.appendChild(articleCardDate);
+    articleCardText.appendChild(articleCardBody);
+    articleCardContent.appendChild(shareButton);
+
+    return articleCard;
+}
+
+function displayPost(post) {
+    const articleSection = document.querySelector(".article");
+    articleSection.innerHTML = "";
+    const articleCard = createPost(post);
+    articleSection.appendChild(articleCard);
+}
+
+
+// function sharePostWithID(id) {
+//     let basePath = window.location.hostname === "mamf92.github.io"
+//         ? "/escnews"
+//         : "";
+//     window.location.href = `${basePath}/html/public/newsarticle.html?id=${id}`;
+// }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    displayName();
+});
+
+addLogInEventListener();
+getPostByID(allPostsURL); 
