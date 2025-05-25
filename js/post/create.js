@@ -1,5 +1,16 @@
+import { addLogInEventListener, displayName, showErrorPopup } from '../shared.js';
+
 const API_BASE_URL = "https://v2.api.noroff.dev";
 const postURL = `${API_BASE_URL}/blog/posts/martin_fischer_test`;
+
+function checkLoggedIn() {
+    if (localStorage.getItem('accessToken') === null) {
+        let basePath = window.location.hostname === "mamf92.github.io"
+            ? "/escnews"
+            : "";
+        window.location.href = `${basePath}/html/account/login.html`;
+    }
+}
 
 function addSubmitHandler(url) {
     const form = document.forms.createPostForm;
@@ -12,14 +23,10 @@ function addSubmitHandler(url) {
 
 function createPost(form, url) {
     const formData = getFormData(form);
-    console.log('Form data collected.', formData);
     const validFormData = validateFormData(formData);
     console.log(validFormData);
     if (!validFormData) {
-        console.log('Form data is not valid.');
         return;
-    } else {
-        console.log('Form data is valid.');
     }
     const preparedData = prepareUserData(formData);
     postPostWithToken(preparedData, url);
@@ -85,26 +92,16 @@ async function postPostWithToken(data, url) {
         const id = json.data.id;
         moveToNextPage(id);
     } catch (error) {
-        console.log(error);
+        console.error('Error creating post:', error);
+        showErrorPopup('Check if image is publicly available, and try again.', 'Error creating post');
     }
 }
+document.addEventListener('DOMContentLoaded', function () {
+    displayName();
+    addLogInEventListener();
+    addSubmitHandler(postURL);
+});
 
-// function checkImage(url, callback) {
-//     const img = new Image();
-//     img.onload = function () { callback(true); };
-//     img.onerror = function () { callback(false); };
-//     img.src = url;
-// }
+checkLoggedIn();
 
-// const imageUrl = "";
-
-// checkImage(imageUrl, function (exists) {
-//     if (exists) {
-//         console.log("Image exists and loaded successfully");
-//     } else {
-//         console.log("Image failed to load");
-//     }
-// });
-
-addSubmitHandler(postURL);
 

@@ -22,7 +22,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/favicon/favicon-16x16.png">
     <link rel="manifest" href="../../assets/favicon/site.webmanifest">
     <script src="https://kit.fontawesome.com/f119ec2cf5.js" crossorigin="anonymous"></script>
-    <script src="../../js/post/create.js" defer></script>
+    <script type="module" src="../../js/post/create.js"></script>
 
 </head>
 
@@ -43,13 +43,15 @@
             </label>
         </div>
         <nav class="nav">
+            <button class="button primary large burger__cta arrow-right">Log in</button>
+
             <a href="../../index.html">News</a>
             <a href="../public/404.html">Events</a>
             <a href="../public/404.html">Music videos</a>
             <a href="../public/404.html">Contestants</a>
             <a href="../public/404.html">About</a>
         </nav>
-        <a href="../account/register.html" class="button primary small arrow-right header__cta">Register</a>
+        <a href="../account/login.html" class="button primary small arrow-right header__cta">Sign in</a>
 
     </header>
     <main class="main--admin" id="main-content">
