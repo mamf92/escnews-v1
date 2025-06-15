@@ -93,6 +93,16 @@ git clone https://github.com/mamf92/escnews.git
 
 ---
 
+## 📄 License
+
+© 2025 Martin Fischer. All rights reserved.
+
+This project and its source code are protected under copyright law.  
+You may not reproduce, distribute, modify, or use any part of this project or its content without explicit written permission from the author.
+
+
+---
+
 ## 👤 Contact
 
 - [LinkedIn – Martin Fischer](https://www.linkedin.com/in/mamf92/)
