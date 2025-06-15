@@ -1,5 +1,10 @@
 # 💜 PurpleSequin – ESC News Platform
 
+
+![ESC News Banner](https://github.com/mamf92/escnews/blob/main/images/banner.png?raw=true)
+
+---
+
 **PurpleSequin** is a responsive editorial blog focused on the **Eurovision Song Contest**, developed as the **Project Exam** for the first year of front-end studies @ Noroff. The website connects to an existing API, allowing public users to view content about ESC and admin users to view, create, and manage the posts. 
 
 ---
