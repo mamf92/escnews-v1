@@ -3,6 +3,11 @@ import { showConfirmationPopup, showErrorPopup } from '../shared.js';
 const API_BASE_URL = 'https://v2.api.noroff.dev';
 const allPostsURL = `${API_BASE_URL}/blog/posts/martin_fischer_test`;
 
+/**
+ * Checks if user is logged in and redirects to login page if not authenticated
+ * @param {string} url - The API URL to fetch posts from if user is authenticated
+ */
+
 function checkLoggedIn(url) {
   if (localStorage.getItem('accessToken') === null) {
     let basePath =
@@ -12,6 +17,12 @@ function checkLoggedIn(url) {
     getAllPosts(url);
   }
 }
+
+/**
+ * Fetches all posts from the API and displays them on the page
+ * @param {string} url - The API endpoint URL to fetch posts from
+ * @throws {Error} When the API request fails or returns invalid data
+ */
 
 async function getAllPosts(url) {
   try {
@@ -39,6 +50,12 @@ async function getAllPosts(url) {
     showErrorPopup(error.message, 'Error fetching posts');
   }
 }
+
+/**
+ * Creates a small admin card element for a blog post
+ * @param {Object} post - The post object containing title, body, and media information
+ * @returns {HTMLElement} The created admin card article element
+ */
 
 function createAdminCardSmall(post) {
   const adminCardSmall = document.createElement('article');
@@ -100,6 +117,11 @@ function createAdminCardSmall(post) {
   return adminCardSmall;
 }
 
+/**
+ * Displays the newest 4 published posts in the published posts section
+ * @param {Array<Object>} posts - Array of post objects to display
+ */
+
 function displayPublishedPosts(posts) {
   const publishedPostsSection = document.querySelector('.published-posts');
   publishedPostsSection.innerHTML = '';
@@ -109,6 +131,12 @@ function displayPublishedPosts(posts) {
     publishedPostsSection.appendChild(adminCardSmall);
   });
 }
+
+/**
+ * Creates a thumbnail admin card element for a blog post
+ * @param {Object} post - The post object containing title, body, and media information
+ * @returns {HTMLElement} The created admin card thumbnail article element
+ */
 
 function createAdminCardThumbnail(post) {
   const adminCardThumbnail = document.createElement('article');
@@ -170,6 +198,11 @@ function createAdminCardThumbnail(post) {
   return adminCardThumbnail;
 }
 
+/**
+ * Displays posts 5-10 in the more published posts section using thumbnail cards
+ * @param {Array<Object>} posts - Array of post objects to display
+ */
+
 function displayMorePublishedPosts(posts) {
   const morePublishedPostsContent = document.querySelector(
     '.more-published-posts__content'
@@ -181,6 +214,11 @@ function displayMorePublishedPosts(posts) {
     morePublishedPostsContent.appendChild(adminCardThumbnail);
   });
 }
+
+/**
+ * Creates and displays a "Load More" button if there are more than 10 posts
+ * @param {Array<Object>} posts - Array of all post objects
+ */
 
 function displayLoadMorePostsButton(posts) {
   const morePublishedPostsSection = document.querySelector(
@@ -207,6 +245,11 @@ function displayLoadMorePostsButton(posts) {
   }
 }
 
+/**
+ * Loads 4 more posts when the "Load More" button is clicked
+ * @param {Array<Object>} posts - Array of all post objects
+ */
+
 function loadMorePosts(posts) {
   const morePublishedPostsContent = document.querySelector(
     '.more-published-posts__content'
@@ -229,6 +272,10 @@ function loadMorePosts(posts) {
   }
 }
 
+/**
+ * Sets up event listener for the create new post button to navigate to create page
+ */
+
 function routeToCreatePost() {
   const createNewPostButton = document.querySelector('#createNewPostButton');
   createNewPostButton.addEventListener('click', function () {
@@ -237,6 +284,12 @@ function routeToCreatePost() {
     window.location.href = `${basePath}/html/post/create.html`;
   });
 }
+
+/**
+ * Navigates to the edit post page with the specified post ID
+ * @param {string} id - The unique identifier of the post to edit
+ */
+
 function routeToEditWithID(id) {
   let basePath =
     window.location.hostname === 'mamf92.github.io' ? '/escnews' : '';
@@ -248,6 +301,12 @@ function routeToPostWithID(id) {
     window.location.hostname === 'mamf92.github.io' ? '/escnews' : '';
   window.location.href = `${basePath}/html/public/newsarticle.html?id=${id}`;
 }
+
+/**
+ * Deletes a post after user confirmation using API authorization
+ * @param {string} id - The unique identifier of the post to delete
+ * @throws {Error} When the delete request fails or user is not authorized
+ */
 
 async function deletePostWithAuthorization(id) {
   try {
@@ -281,6 +340,11 @@ async function deletePostWithAuthorization(id) {
   }
 }
 
+/**
+ * Displays the logged-in user's name in the header navigation
+ * Updates the login button to show personalized greeting if user is logged in
+ */
+
 function displayName() {
   const logInButton = document.querySelector('.header__cta');
   if (localStorage.getItem('name') === null) {
@@ -295,4 +359,3 @@ function displayName() {
 displayName();
 routeToCreatePost();
 checkLoggedIn(allPostsURL);
-// getAllPosts(allPostsURL);
