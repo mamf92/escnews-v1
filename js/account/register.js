@@ -6,6 +6,13 @@ import {
 
 const API_URL = 'https://v2.api.noroff.dev/auth/register';
 
+/**
+ * Registers a new user by validating form data and sending it to the API
+ * @param {HTMLFormElement} form - The registration form element
+ * @param {string} url - The API endpoint URL for registration
+ * @returns {Promise<void>} Resolves when registration process is complete
+ */
+
 async function registerUser(form, url) {
   const formData = getFormData(form);
   const validFormData = validateFormData(formData);
@@ -20,6 +27,11 @@ async function registerUser(form, url) {
   }
 }
 
+/**
+ * Adds a submit event listener to the registration form
+ * @param {string} url - The API endpoint URL for registration
+ */
+
 function addSubmitHandler(url) {
   const form = document.forms.registerAdminForm;
   form.addEventListener('submit', (event) => {
@@ -28,11 +40,26 @@ function addSubmitHandler(url) {
   });
 }
 
+/**
+ * Extracts form data and converts it to a plain object
+ * @param {HTMLFormElement} form - The form element to extract data from
+ * @returns {Object} An object containing form field values as key-value pairs
+ */
+
 function getFormData(form) {
   const formData = new FormData(form);
   const objectFromFrom = Object.fromEntries(formData.entries());
   return objectFromFrom;
 }
+
+/**
+ * Validates registration form data including name, email and password requirements
+ * @param {Object} data - The form data object to validate
+ * @param {string} data.name - The user's full name
+ * @param {string} data.email - The user's email address
+ * @param {string} data.password - The user's password
+ * @returns {boolean} True if all validation passes, false otherwise
+ */
 
 function validateFormData(data) {
   if (!data) {
@@ -79,12 +106,22 @@ function validateFormData(data) {
   return true;
 }
 
+/**
+ * Sets up an event listener for the password confirmation input field
+ * Validates that passwords match in real-time as the user types
+ */
+
 function confirmPasswordEventListener() {
   const confirmPasswordInput = document.querySelector(
     '.password-confirm-input'
   );
   confirmPasswordInput.addEventListener('keyup', checkPasswordConfirmation);
 }
+
+/**
+ * Validates that the password confirmation matches the original password
+ * Sets custom validation message if passwords don't match
+ */
 
 function checkPasswordConfirmation() {
   const passwordInput = document.getElementById('password-input');
@@ -98,6 +135,15 @@ function checkPasswordConfirmation() {
   }
 }
 
+/**
+ * Prepares user data for API submission by formatting the name field
+ * @param {Object} data - The raw form data
+ * @param {string} data.name - The user's full name with potential spaces
+ * @param {string} data.email - The user's email address
+ * @param {string} data.password - The user's password
+ * @returns {Object} Formatted data object with name spaces replaced by underscores
+ */
+
 function prepareUserData(data) {
   const preparedData = {
     name: data.name.replace(/\s+/g, '_'),
@@ -106,6 +152,17 @@ function prepareUserData(data) {
   };
   return preparedData;
 }
+
+/**
+ * Sends registration data to the API and returns the response
+ * @param {Object} data - The prepared registration data
+ * @param {string} data.name - The user's formatted name (with underscores)
+ * @param {string} data.email - The user's email address
+ * @param {string} data.password - The user's password
+ * @param {string} url - The API endpoint URL for registration
+ * @returns {Promise<Object|undefined>} The API response containing user data, or undefined if request fails
+ * @throws {Error} When the registration request fails or user already exists
+ */
 
 async function postRegistrationToAPI(data, url) {
   try {
@@ -132,11 +189,21 @@ async function postRegistrationToAPI(data, url) {
   }
 }
 
+/**
+ * Redirects the user to the login page after successful registration
+ * Handles different base paths for GitHub Pages deployment vs local development
+ */
+
 function moveToNextPage() {
   let basePath =
     window.location.hostname === 'mamf92.github.io' ? '/escnews' : '';
   window.location.href = `${basePath}/html/account/login.html`;
 }
+
+/**
+ * Initializes page functionality when DOM content is loaded
+ * Sets up login event listeners and displays user name if logged in
+ */
 
 document.addEventListener('DOMContentLoaded', function () {
   addLogInEventListener();

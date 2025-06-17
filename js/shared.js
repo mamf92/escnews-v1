@@ -1,3 +1,8 @@
+/**
+ * Displays the logged-in user's name in the header navigation or keeps login button if not logged in
+ * Updates the header CTA button to show a personalized greeting and links to posts page when user is authenticated
+ */
+
 function displayName() {
   const logInButton = document.querySelector('.header__cta');
   if (localStorage.getItem('name') === null) {
@@ -11,6 +16,11 @@ function displayName() {
     logInButton.href = `${basePath}/html/post/`;
   }
 }
+
+/**
+ * Sets up the burger menu CTA button with appropriate functionality based on user login status
+ * If logged in, shows user name and links to posts page; if not logged in, links to login page
+ */
 
 function addLogInEventListener() {
   const burgerCTA = document.querySelector('.burger__cta');
@@ -31,6 +41,13 @@ function addLogInEventListener() {
     });
   }
 }
+
+/**
+ * Creates and displays an error popup with a custom message and title
+ * The popup includes a warning icon and close button, and is automatically added to the document body
+ * @param {string} message - The error message to display in the popup body
+ * @param {string} title - The title/heading to display in the popup
+ */
 
 function showErrorPopup(message, title) {
   const errorPopup = document.createElement('div');
@@ -81,6 +98,14 @@ function showErrorPopup(message, title) {
   document.body.appendChild(errorPopup);
   errorPopup.classList.add('show');
 }
+
+/**
+ * Creates and displays a confirmation popup that returns a Promise resolving to user's choice
+ * The popup includes cancel and confirm buttons, with a warning icon
+ * @param {string} message - The confirmation message to display in the popup body
+ * @param {string} title - The title/heading to display in the popup
+ * @returns {Promise<boolean>} Promise that resolves to true if user confirms, false if user cancels
+ */
 
 function showConfirmationPopup(message, title) {
   return new Promise((resolve) => {

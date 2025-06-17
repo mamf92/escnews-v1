@@ -7,6 +7,13 @@ import {
 const API_BASE_URL = 'https://v2.api.noroff.dev';
 const allPostsURL = `${API_BASE_URL}/blog/posts/martin_fischer_test`;
 
+/**
+ * Fetches all posts from the API and orchestrates the display of posts in different sections
+ * @param {string} url - The API endpoint URL to fetch posts from
+ * @returns {Promise<void>} Resolves when all posts are fetched and displayed
+ * @throws {Error} When the API request fails or returns invalid data
+ */
+
 async function getAllPosts(url) {
   try {
     const response = await fetch(url);
@@ -34,6 +41,18 @@ async function getAllPosts(url) {
     showErrorPopup(error.message, 'Error');
   }
 }
+
+/**
+ * Creates a medium-sized content card element for displaying a blog post
+ * @param {Object} post - The post object containing post data
+ * @param {string} post.id - The unique identifier of the post
+ * @param {string} post.title - The title of the post
+ * @param {string} post.body - The body content of the post
+ * @param {Object} post.media - The media object containing image data
+ * @param {string} post.media.url - The URL of the post image
+ * @param {string} post.media.alt - The alt text for the post image
+ * @returns {HTMLElement} The created medium card article element with click navigation
+ */
 
 function createContentCardM(post) {
   const contentCardM = document.createElement('article');
@@ -76,6 +95,11 @@ function createContentCardM(post) {
   return contentCardM;
 }
 
+/**
+ * Displays the 3 newest posts in the carousel section
+ * @param {Array<Object>} posts - Array of post objects to display
+ */
+
 function displayNewestPosts(posts) {
   const carousel = document.querySelector('.gallery');
   carousel.innerHTML = '';
@@ -86,6 +110,17 @@ function displayNewestPosts(posts) {
     carousel.appendChild(contentCardM);
   });
 }
+
+/**
+ * Creates an extra small content card element for displaying a blog post
+ * @param {Object} post - The post object containing post data
+ * @param {string} post.id - The unique identifier of the post
+ * @param {string} post.title - The title of the post
+ * @param {Object} post.media - The media object containing image data
+ * @param {string} post.media.url - The URL of the post image
+ * @param {string} post.media.alt - The alt text for the post image
+ * @returns {HTMLElement} The created extra small card article element with click navigation
+ */
 
 function createContentCardXSmall(post) {
   const contentCardXSmall = document.createElement('article');
@@ -123,6 +158,11 @@ function createContentCardXSmall(post) {
   return contentCardXSmall;
 }
 
+/**
+ * Displays posts 4-7 in the published posts section using extra small cards
+ * @param {Array<Object>} posts - Array of post objects to display
+ */
+
 function displayPublishedPosts(posts) {
   const publishedPostsSection = document.querySelector('.published-posts');
   publishedPostsSection.innerHTML = '';
@@ -135,6 +175,17 @@ function displayPublishedPosts(posts) {
     publishedPostsSection.appendChild(contentCardXSmall);
   });
 }
+
+/**
+ * Creates a thumbnail content card element for displaying a blog post
+ * @param {Object} post - The post object containing post data
+ * @param {string} post.id - The unique identifier of the post
+ * @param {string} post.title - The title of the post
+ * @param {Object} post.media - The media object containing image data
+ * @param {string} post.media.url - The URL of the post image
+ * @param {string} post.media.alt - The alt text for the post image
+ * @returns {HTMLElement} The created thumbnail card article element with click navigation
+ */
 
 function createContentCardThumbnail(post) {
   const contentCardThumbnail = document.createElement('article');
@@ -172,6 +223,11 @@ function createContentCardThumbnail(post) {
   return contentCardThumbnail;
 }
 
+/**
+ * Displays posts 8-15 in the more published posts section using thumbnail cards
+ * @param {Array<Object>} posts - Array of post objects to display
+ */
+
 function displayMorePublishedPosts(posts) {
   const morePublishedPostsContent = document.querySelector(
     '.more-published-posts__content'
@@ -186,6 +242,11 @@ function displayMorePublishedPosts(posts) {
     morePublishedPostsContent.appendChild(contentCardThumbnail);
   });
 }
+
+/**
+ * Creates and displays a "Load More" button if there are more than 15 posts
+ * @param {Array<Object>} posts - Array of all post objects
+ */
 
 function displayLoadMorePostsButton(posts) {
   const morePublishedPostsSection = document.querySelector(
@@ -212,6 +273,11 @@ function displayLoadMorePostsButton(posts) {
   }
 }
 
+/**
+ * Loads 4 more posts when the "Load More" button is clicked and removes button when all posts are loaded
+ * @param {Array<Object>} posts - Array of all post objects
+ */
+
 function loadMorePosts(posts) {
   const morePublishedPostsContent = document.querySelector(
     '.more-published-posts__content'
@@ -233,6 +299,11 @@ function loadMorePosts(posts) {
     loadMorePostsButton.remove();
   }
 }
+
+/**
+ * Sets up interactive carousel functionality with scroll detection, dot indicators, and navigation buttons
+ * Uses IntersectionObserver to track which carousel item is currently in view and updates indicators accordingly
+ */
 
 function setupCarousel() {
   const carouselItems = document.querySelectorAll('.carousel__item');
@@ -269,6 +340,11 @@ function setupCarousel() {
   carouselItems.forEach((item) => {
     observer.observe(item);
   });
+
+  /**
+   * Updates the visual state of carousel dot indicators
+   * @param {number} activeIndex - The index of the currently active carousel item
+   */
 
   function updateDots(activeIndex) {
     dots.forEach((dot, index) => {
@@ -346,6 +422,11 @@ function setupCarousel() {
     }
   });
 }
+
+/**
+ * Initializes the homepage when DOM content is loaded
+ * Sets up user display, login functionality, and fetches all posts
+ */
 
 document.addEventListener('DOMContentLoaded', function () {
   displayName();
